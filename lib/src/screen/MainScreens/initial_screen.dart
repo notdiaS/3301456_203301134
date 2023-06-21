@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/src/screen/MainScreens/sign_up.dart';
+import 'package:myapp/src/screen/Pages/appPages.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-import '../../constants/colors.dart';
-import '../../constants/images_str.dart';
+import 'package:myapp/src/constants/colors.dart';
+import 'package:myapp/src/constants/images_str.dart';
 import 'login.dart';
 
 class Initial extends StatelessWidget {
@@ -13,6 +16,15 @@ class Initial extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var fontsize = MediaQuery.of(context).textScaleFactor;
+
+    final firebaseUser = context.watch<User?>();
+
+    if (firebaseUser != null) {
+      print("Already Signed in");
+      return const AppPages();
+    }
+
+    print("Not Authenticated");
 
     return Scaffold(
       backgroundColor: sExtraColor1,
@@ -51,8 +63,6 @@ class Initial extends StatelessWidget {
                         bottomLeft: Radius.circular(40)),
                   ),
                   alignment: Alignment.center,
-                  transform: Matrix4.rotationZ(0),
-                  transformAlignment: Alignment.center,
 
                   child: GradientText(
                     'Greetings!',
@@ -104,7 +114,7 @@ class Initial extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 10.0,bottom: 2.0,top:8.0),
                     child: PhysicalModel(
                       color: sAssistColor,
-                      shadowColor: sSecondaryColor,
+                      shadowColor: sFontColor,
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       elevation: 20,
                       child: ClipRRect(

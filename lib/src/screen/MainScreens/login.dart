@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:myapp/src/repository/login_info.dart';
 import 'package:myapp/src/constants/images_str.dart';
-import 'package:myapp/src/screen/Pages/appPages.dart';
-import '../../constants/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:myapp/src/constants/colors.dart';
+import 'package:myapp/src/providers/firebase_provider.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -14,8 +15,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController _luserName = TextEditingController();
-  TextEditingController _lpassword = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class _LoginState extends State<Login> {
                       child: TextField(
                         onChanged: (value) {
                           setState(() {
-                            _luserName = value as TextEditingController;
+                            eMail = value;
                           });
                         },
                         decoration: InputDecoration(
@@ -69,7 +70,7 @@ class _LoginState extends State<Login> {
                               borderSide:
                                   BorderSide(width: 3, color: sFontColor),
                             ),
-                            prefixIcon: const Icon(Icons.person),
+                            prefixIcon: const Icon(Icons.mail),
                             prefixIconColor: MaterialStateColor.resolveWith(
                                 (Set<MaterialState> states) {
                               if (states.contains(MaterialState.focused)) {
@@ -84,21 +85,21 @@ class _LoginState extends State<Login> {
                                 borderSide: BorderSide(
                               color: sPrimaryColor,
                             )),
-                            labelText: 'Username',
-                            hintText: 'Enter your username',
+                            labelText: 'E-Mail',
+                            hintText: 'Enter your email',
                             labelStyle: const TextStyle(color: sPrimaryColor),
                             suffixIcon: IconButton(
                               onPressed: () {
-                                _luserName.clear();
+                                emailController.clear();
                               },
                               icon: const Icon(FontAwesomeIcons.trashCan,
                                   size: 23),
                               color: sPrimaryColor,
                             )),
-                        controller: _luserName,
+                        controller: emailController,
                         cursorColor: sAssistColor,
                         cursorWidth: 5,
-                        maxLength: 10,
+                        maxLength: 50,
                         maxLines: 1,
                       ),
                     ),
@@ -107,7 +108,7 @@ class _LoginState extends State<Login> {
                       child: TextField(
                         onChanged: (value) {
                           setState(() {
-                            _lpassword = value as TextEditingController;
+                            passWord = value;
                           });
                         },
                         decoration: InputDecoration(
@@ -140,13 +141,13 @@ class _LoginState extends State<Login> {
                             labelStyle: const TextStyle(color: sPrimaryColor),
                             suffixIcon: IconButton(
                               onPressed: () {
-                                _lpassword.clear();
+                                passwordController.clear();
                               },
                               icon: const Icon(FontAwesomeIcons.trashCan,
                                   size: 23),
                               color: sPrimaryColor,
                             )),
-                        controller: _lpassword,
+                        controller: passwordController,
                         cursorColor: sAssistColor,
                         cursorWidth: 5,
                         maxLength: 6,
@@ -163,17 +164,13 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.only(bottom: 33, top: 4),
                   child: OutlinedButton(
                     onPressed: () {
-                      if (_luserName.text.isNotEmpty &&
-                          _lpassword.text.isNotEmpty) {
-                        if (_luserName.text == userName &&
-                            _lpassword.text == passWord) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                  builder: (context) => const AppPages()),
-
-                          );
-                        }
+                      if (emailController.text.isNotEmpty &&
+                          passwordController.text.isNotEmpty) {
+                        context.read<FlutterFireAuthService>().signIn(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                          context: context,
+                        );
                       } else {
                         {
                           showDialog<String>(

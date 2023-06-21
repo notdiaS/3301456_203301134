@@ -1,4 +1,3 @@
-
 //Gender
 import 'package:flutter/cupertino.dart';
 
@@ -8,9 +7,6 @@ enum Gender {
   unknown,
 }
 Gender? gender = Gender.unknown;
-//Employment Status
-const currentEmployment = ["Don't share.", "Employed","Unemployed","Student"];
-String? employment;
 //Age
 double age = 18;
 

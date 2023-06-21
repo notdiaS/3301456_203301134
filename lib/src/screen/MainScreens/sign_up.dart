@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:myapp/src/providers/firebase_provider.dart';
 import 'package:myapp/src/screen/MainScreens/login.dart';
-import '../../constants/colors.dart';
-import '../../constants/images_str.dart';
+import 'package:provider/provider.dart';
 import 'package:myapp/src/repository/login_info.dart';
+import 'package:myapp/src/constants/colors.dart';
+import 'package:myapp/src/constants/images_str.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -16,18 +18,18 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   // Controller
 
-  TextEditingController _eMail = TextEditingController();
-  TextEditingController _userName = TextEditingController();
-  TextEditingController _password = TextEditingController();
+  final TextEditingController userName = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   //String userName = _userName.text;
   //String passWord = _password.text;
 
   @override
   void dispose() {
-    _eMail.dispose();
-    _userName.dispose();
-    _password.dispose();
+    emailController.dispose();
+    userName.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -101,13 +103,13 @@ class _SignUpState extends State<SignUp> {
                             labelStyle: const TextStyle(color: sPrimaryColor),
                             suffixIcon: IconButton(
                               onPressed: () {
-                                _eMail.clear();
+                                emailController.clear();
                               },
                               icon: const Icon(FontAwesomeIcons.trashCan,
                                   size: 23),
                               color: sPrimaryColor,
                             )),
-                        controller: _eMail,
+                        controller: emailController,
                         cursorColor: sAssistColor,
                         cursorWidth: 5,
                         maxLines: 1,
@@ -119,7 +121,7 @@ class _SignUpState extends State<SignUp> {
                       child: TextField(
                         onChanged: (value) {
                           setState(() {
-                            userName = value;
+                            user_Name = value;
                           });
                         },
                         decoration: InputDecoration(
@@ -151,13 +153,13 @@ class _SignUpState extends State<SignUp> {
                             labelStyle: const TextStyle(color: sPrimaryColor),
                             suffixIcon: IconButton(
                               onPressed: () {
-                                _userName.clear();
+                                userName.clear();
                               },
                               icon: const Icon(FontAwesomeIcons.trashCan,
                                   size: 23),
                               color: sPrimaryColor,
                             )),
-                        controller: _userName,
+                        controller: userName,
                         cursorColor: sAssistColor,
                         cursorWidth: 5,
                         maxLines: 1,
@@ -202,13 +204,13 @@ class _SignUpState extends State<SignUp> {
                             labelStyle: const TextStyle(color: sPrimaryColor),
                             suffixIcon: IconButton(
                               onPressed: () {
-                                _password.clear();
+                                passwordController.clear();
                               },
                               icon: const Icon(FontAwesomeIcons.trashCan,
                                   size: 23),
                               color: sPrimaryColor,
                             )),
-                        controller: _password,
+                        controller: passwordController,
                         cursorColor: sAssistColor,
                         cursorWidth: 5,
                         maxLength: 6,
@@ -225,9 +227,13 @@ class _SignUpState extends State<SignUp> {
                   padding: const EdgeInsets.only(bottom: 10, top: 2),
                   child: OutlinedButton(
                     onPressed: () {
-                      if (_eMail.text.isNotEmpty &&
-                          _userName.text.isNotEmpty &&
-                          _password.text.isNotEmpty) {
+                      if (emailController.text.isNotEmpty &&
+                          passwordController.text.isNotEmpty) {
+                        context.read<FlutterFireAuthService>().signUp(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                          context: context,
+                        );
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

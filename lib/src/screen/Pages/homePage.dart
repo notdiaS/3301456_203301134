@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:myapp/src/constants/colors.dart';
 import 'package:myapp/src/constants/images_str.dart';
-import 'package:myapp/src/constants/profileData.dart';
+
 import 'package:myapp/src/screen/MainScreens/initial_screen.dart';
 import 'package:myapp/src/screen/SubScreen/profile_info.dart';
-import '../../repository/login_info.dart';
+import 'package:provider/provider.dart';
+import 'package:myapp/src/providers/firebase_provider.dart';
+import 'package:myapp/src/repository/login_info.dart';
+
+
 
 class AppPage1 extends StatefulWidget {
   const AppPage1({Key? key}) : super(key: key);
@@ -42,13 +46,13 @@ class _AppPage1State extends State<AppPage1> {
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text(
-                "${nameController.text} ${surnameController.text}",
-                style: const TextStyle(color: sSecondaryColor),
+              accountName: const Text(
+                ' ',
+                style: TextStyle(color: sSecondaryColor),
               ),
               accountEmail: Text(
-                "$eMail",
-                style: TextStyle(color: sSecondaryColor),
+                eMail,
+                style: const TextStyle(color: sSecondaryColor),
               ),
               currentAccountPicture: const CircleAvatar(
                 backgroundImage: AssetImage(sDrawerAvatar),
@@ -60,19 +64,18 @@ class _AppPage1State extends State<AppPage1> {
             ListTile(
               leading: const FaIcon(FontAwesomeIcons.gears),
               title: const Text('Settings'),
-              onTap: () {
-              },
+              onTap: () {},
             ),
             ListTile(
               leading: const FaIcon(FontAwesomeIcons.solidCircleQuestion),
               title: const Text('About Us'),
-              onTap: () {
-              },
+              onTap: () {},
             ),
             ListTile(
               leading: const FaIcon(FontAwesomeIcons.arrowRightFromBracket),
-              title: const Text('Exit'),
+              title: const Text('Sign out.'),
               onTap: () {
+                context.read<FlutterFireAuthService>().signOut();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => const Initial()));
               },
@@ -86,36 +89,32 @@ class _AppPage1State extends State<AppPage1> {
             children: [
               Container(
                 color: sExtraColor3,
-                child:
-                   Expanded(
-                     child: Image(
-                  alignment: Alignment.topCenter,
-                  image: const AssetImage(sNewsImage),
+                child: const Expanded(
+                  child: Image(
+                    alignment: Alignment.topCenter,
+                    image: AssetImage(sNewsImage),
+                  ),
                 ),
-                   ),
               ),
               Container(
                 color: sExtraColor3,
-                child:
-                FittedBox(
+                child: const FittedBox(
                   child: Image(
-                    image: const AssetImage(sUpdateImage1),
+                    image: AssetImage(sUpdateImage1),
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
               Container(
                 color: sExtraColor3,
-                child:
-                Expanded(
+                child: const Expanded(
                   child: Image(
                     alignment: Alignment.topCenter,
-                    image: const AssetImage(sUpdateImage2),
+                    image: AssetImage(sUpdateImage2),
                   ),
                 ),
               ),
             ],
-
           ),
           Positioned(
             bottom: 0,
@@ -127,9 +126,9 @@ class _AppPage1State extends State<AppPage1> {
                 left: 20,
                 right: 20,
               ),
-              height: 100,
+              height: 30,
               decoration: const BoxDecoration(
-                color: sPrimaryColor,
+                color: sAssistColor,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30)),

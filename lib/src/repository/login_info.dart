@@ -1,5 +1,6 @@
 //Login Info
-String userName = "";
+String user_Name = "";
 String passWord = "";
 String eMail = "";
 
+var fullName;

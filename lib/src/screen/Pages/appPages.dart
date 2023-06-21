@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:myapp/src/screen/Pages/appPage1.dart';
-import 'package:myapp/src/screen/Pages/appPage2.dart';
-import 'package:myapp/src/screen/Pages/appPage3.dart';
+import 'package:myapp/src/screen/Pages/homePage.dart';
+import 'package:myapp/src/screen/Pages/notesPage.dart';
 import '../../constants/colors.dart';
+import 'chat_screen.dart';
 
 class AppPages extends StatefulWidget {
   const AppPages({Key? key, required}) : super(key: key);
@@ -14,11 +14,11 @@ class AppPages extends StatefulWidget {
 
 class _AppPagesState extends State<AppPages> {
   int currentPageIndex = 0;
-  var bcolor;
+  dynamic bcolor;
 
   List<Widget> pageList = <Widget>[
     const AppPage1(),
-    const AppPage2(),
+    const ChatScreen(),
     const AppPage3(),
   ];
 
@@ -36,10 +36,10 @@ class _AppPagesState extends State<AppPages> {
             onTap: (index) => setState(() {
               currentPageIndex = index;
               if (index == 1) {
-                bcolor = Colors.green;
+                bcolor = scaffoldBackgroundColor;
               }
               else {
-                bcolor = sPrimaryColor;
+                bcolor = sAssistColor;
               }
             }
             ),
@@ -53,13 +53,13 @@ class _AppPagesState extends State<AppPages> {
               BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.robot),
                 label: 'ChatGPT',
-                backgroundColor: Colors.green,
+                backgroundColor: scaffoldBackgroundColor,
               ),
               BottomNavigationBarItem(
                   icon: FaIcon(FontAwesomeIcons.heart),
                   activeIcon: FaIcon(FontAwesomeIcons.heartCircleCheck),
                   label: 'Saved',
-                  backgroundColor: sPrimaryColor
+
               ),
             ],
             selectedItemColor: sFontColor,
